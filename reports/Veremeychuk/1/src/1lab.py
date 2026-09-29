@@ -20,6 +20,27 @@ print(df.head())
 
 print("\nОбщая информация о датасете:")
 print(df.info())
+print("\n" + "=" * 60)
+print("ОПИСАТЕЛЬНАЯ СТАТИСТИКА (mean, median, std)")
+print("=" * 60)
+print(df.describe())
+
+print("\nМедианы по признакам:")
+print(df.median(numeric_only=True))
+
+print("\nСтандартные отклонения по признакам:")
+print(df.std(numeric_only=True))
+
+
+print("\n" + "=" * 60)
+print("ОБРАБОТКА ПРОПУСКОВ")
+print("=" * 60)
+if df.isnull().sum().sum() > 0:
+    print("Найдены пропуски. Заполняем средним значением...")
+    df = df.fillna(df.mean(numeric_only=True))
+    print("Пропуски обработаны.")
+else:
+    print("Пропусков нет. Обработка не требуется.")
 
 print("\nКоличество пропущенных значений по столбцам:")
 print(df.isnull().sum())
