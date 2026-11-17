@@ -1,8 +1,8 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 
 from sklearn.neural_network import MLPRegressor
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 a = 0.2
@@ -13,7 +13,9 @@ d = 0.4
 INPUTS = 6
 HIDDEN_NEURONS = 2
 
+print("ЛАБОРАТОРНАЯ РАБОТА")
 print("Прогнозирование нелинейной ИНС")
+print("Вариант 10")
 print("-" * 45)
 
 print(f"a = {a}")
@@ -39,7 +41,7 @@ for i in range(INPUTS, len(y)):
 X = np.array(X)
 Y = np.array(Y)
 
-print("\nКоличество обучающих примеров:", len(X))
+print("\nКоличество примеров:", len(X))
 
 split = int(len(X) * 0.8)
 
@@ -51,16 +53,6 @@ Y_test = Y[split:]
 
 print("Обучающая выборка:", len(X_train))
 print("Тестовая выборка:", len(X_test))
-
-scaler_X = StandardScaler()
-scaler_Y = StandardScaler()
-
-X_train_scaled = scaler_X.fit_transform(X_train)
-X_test_scaled = scaler_X.transform(X_test)
-
-Y_train_scaled = scaler_Y.fit_transform(
-    Y_train.reshape(-1, 1)
-).ravel()
 
 model = MLPRegressor(
     hidden_layer_sizes=(HIDDEN_NEURONS,),
@@ -74,15 +66,11 @@ model = MLPRegressor(
 
 print("\nОбучение нейронной сети...")
 
-model.fit(X_train_scaled, Y_train_scaled)
+model.fit(X_train, Y_train)
 
 print("Обучение завершено!")
 
-Y_pred_scaled = model.predict(X_test_scaled)
-
-Y_pred = scaler_Y.inverse_transform(
-    Y_pred_scaled.reshape(-1, 1)
-).ravel()
+Y_pred = model.predict(X_test)
 
 mse = mean_squared_error(Y_test, Y_pred)
 mae = mean_absolute_error(Y_test, Y_pred)
@@ -92,10 +80,10 @@ r2 = r2_score(Y_test, Y_pred)
 print("\nРЕЗУЛЬТАТЫ ПРОГНОЗИРОВАНИЯ")
 print("-" * 45)
 
-print(f"Среднеквадратичная ошибка MSE: {mse:.8f}")
-print(f"Средняя абсолютная ошибка MAE: {mae:.8f}")
-print(f"Корень из MSE (RMSE): {rmse:.8f}")
-print(f"Коэффициент детерминации R2: {r2:.8f}")
+print(f"MSE:  {mse:.8f}")
+print(f"MAE:  {mae:.8f}")
+print(f"RMSE: {rmse:.8f}")
+print(f"R2:   {r2:.8f}")
 
 plt.figure(figsize=(12, 5))
 
@@ -168,6 +156,11 @@ print("Выходной слой: 1 нейрон")
 print("Активация скрытого слоя: сигмоида")
 print("Активация выходного слоя: линейная")
 
-print("\nКоличество обучаемых параметров:",
-      sum(w.size for w in model.coefs_) +
-      sum(b.size for b in model.intercepts_))
+parameters = (
+    sum(w.size for w in model.coefs_) +
+    sum(b.size for b in model.intercepts_)
+)
+
+print("Количество обучаемых параметров:", parameters)
+
+print("\nЛабораторная работа завершена!")
